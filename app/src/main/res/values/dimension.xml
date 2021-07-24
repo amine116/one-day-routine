@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="hour_size2">30dp</dimen>
+
+    <item name="hour_size" format="float" type="dimen">60</item>
+</resources>

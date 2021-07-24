@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Daily Routine</string>
+    <string name="starting_time">Starting Time</string>
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
+    <string name="ending_time">Ending Time</string>
+    <string name="scroll">Scroll</string>
+    <string name="arrow_right"><![CDATA[>]]></string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="write_here">Write here</string>
+    <string name="details">Details</string>
+    <string name="new_schedule">New schedule</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>
