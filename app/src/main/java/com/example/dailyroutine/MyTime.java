@@ -38,6 +38,14 @@ public class MyTime {
         else return time + "PM";
     }
 
+    public long toMills(){
+        return toSecond()*1000;
+    }
+
+    public long toSecond(){
+        return toMinute()*60;
+    }
+
     private String getTwoDigitHour(){
         if(getHour() == 0 || getHour() - 12 == 0) return "12";
         if(getHour() < 10) return "0" + getHour();

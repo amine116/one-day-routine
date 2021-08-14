@@ -6,13 +6,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -116,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        rootFolder = "/storage/emulated/0/Daily Routine";
         rootFolder = getFilesDir();
         getSDCardStoragePermission();
+        createNotificationChannel();
         makePrimaryFileAndFolder();
         getHourHeight(new TypedValue());
         setHourList();
@@ -789,6 +796,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Task task = new Task(startingHour,startingMin,
                         endingHour, endingMin, strTitle, strDetails);
 
+                //setAlarm(startingHour,startingMin, strTitle, strDetails);
+
                 startingHour = startingMin = endingMin = endingHour = 0;
 
                 tasksList.add(task);
@@ -835,6 +844,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return -1;
         }
 
+    }
+
+    private void setAlarm(int startingHour, int startingMin, String title, String details) {
+        AlarmManager aManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+
+        Intent i = new Intent();
+        String action = "com.example.dailyroutine" + "." + title; getPackageName();
+        i.setAction(action);
+        i.addCategory("android.intent.category.DEFAULT");
+        i.putExtra("TITLE", title);
+        i.putExtra("MESSAGE", details);
+        i.putExtra("LONG_TEXT", details);
+        
+        i.putExtra("CHANEL_ID", getResources().getString(R.string.not_id_start));
+
+        PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
+
+        long tim = SystemClock.elapsedRealtime(), tim1 = new MyTime(startingHour, startingMin).toMills();
+
+        Log.i("test", tim + " " + tim1 + " " + (tim1 - tim)/1000/60);
+
+        aManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, tim, tim1 - tim, pi);
+
+        createNotificationChannel();
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(
+                    AlertReceiver.CH_START_ID, AlertReceiver.CH_NAME, importance);
+            channel.setDescription(AlertReceiver.CH_DESC);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     public static class TimePickerFragment extends DialogFragment

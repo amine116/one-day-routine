@@ -14,4 +14,7 @@
     <string name="new_schedule">New schedule</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="not_chanel_name">chanel1</string>
+    <string name="not_chanel1_desc">starting_time</string>
+    <string name="not_id_start">start_schedule</string>
 </resources>
